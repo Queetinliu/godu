@@ -33,7 +33,7 @@ func main() {
 	args := flag.Args()
 	rootFolderName := "."
 	if len(args) > 0 {
-		rootFolderName = args[0]
+		rootFolderName = args[0]  //args[0]是程序本身？
 	}
 	rootFolderName, err := filepath.Abs(rootFolderName)
 	if err != nil {
