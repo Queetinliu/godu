@@ -47,7 +47,7 @@ type ShouldIgnoreFolder func(absolutePath string) bool
 func ignoringReadDir(shouldIgnore ShouldIgnoreFolder, originalReadDir ReadDir) ReadDir {
 	return func(path string) ([]os.FileInfo, error) {
 		if shouldIgnore(path) {
-			return []os.FileInfo{}, nil
+			return []os.FileInfo{}, nil  //如果需要忽略目录，则返回空的FileInfo，否则返回方法本身
 		}
 		return originalReadDir(path)
 	}
