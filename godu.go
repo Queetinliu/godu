@@ -30,17 +30,17 @@ func main() {
 		fmt.Printf("godu %s\n", goduVersion)
 		os.Exit(0)
 	}
-	args := flag.Args()
+	args := flag.Args()  //除了定义的flag以外的参数
 	rootFolderName := "."
 	if len(args) > 0 {
-		rootFolderName = args[0]  //args[0]是程序本身？
+		rootFolderName = args[0]  //args[0]是除了定义的flag以外的第一个参数
 	}
-	rootFolderName, err := filepath.Abs(rootFolderName)
+	rootFolderName, err := filepath.Abs(rootFolderName)   //获取绝对路径
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	progress := make(chan int)
-	go reportProgress(progress)
+	progress := make(chan int)  //创建int 通道
+	go reportProgress(progress)  //显示目录数
 	rootFolder := files.WalkFolder(rootFolderName, ioutil.ReadDir, ignoreBasedOnIgnoreFile(readIgnoreFile()), progress)
 	rootFolder.Name = rootFolderName
 	err = commands.ProcessFolder(rootFolder, *limit*files.MEGABYTE)
@@ -72,13 +72,13 @@ func reportProgress(progress <-chan int) {
 	ticker := time.NewTicker(interval)
 	for {
 		select {
-		case c, ok := <-progress:
+		case c, ok := <-progress:  //如果通道中有值，则加上该值
 			if !ok {
 				return
 			}
 			total += c
-		case <-ticker.C:
-			fmt.Fprintf(writer, "Walked through %d folders\n", total)
+		case <-ticker.C:  //否则显示有多少目录
+			fmt.Fprintf(writer, "Walked through %d folders\n", total)  
 		}
 	}
 }
