@@ -62,7 +62,7 @@ func WalkFolder(
 	progress chan<- int,
 ) *File {
 	var wg sync.WaitGroup
-	c := make(chan bool, 2*runtime.NumCPU())
+	c := make(chan bool, 2*runtime.NumCPU())  //runtime.NumCPU()返回可用cpu数，创建带缓冲通道
 	root := walkSubFolderConcurrently(path, nil, ignoringReadDir(ignoreFunction, readDir), c, &wg, progress)
 	wg.Wait()
 	close(progress)
@@ -78,13 +78,13 @@ func walkSubFolderConcurrently(
 	wg *sync.WaitGroup,
 	progress chan<- int,
 ) *File {
-	result := &File{}
-	entries, err := readDir(path)
+	result := &File{}  //初始化一个File对象
+	entries, err := readDir(path)    //读取path
 	if err != nil {
 		log.Println(err)
 		return result
 	}
-	dirName, name := filepath.Split(path)
+	dirName, name := filepath.Split(path)  
 	result.Files = make([]*File, 0, len(entries))
 	numSubFolders := 0
 	defer updateProgress(progress, &numSubFolders)
