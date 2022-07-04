@@ -44,7 +44,7 @@ func main() {
 	rootFolder := files.WalkFolder(rootFolderName, ioutil.ReadDir, ignoreBasedOnIgnoreFile(readIgnoreFile()), progress) //ignoreBasedOnIgnoreFile定义在ignore.go
 	                                                                                                                    //readIgnoreFile()也在ignore.go
 	rootFolder.Name = rootFolderName
-	err = commands.ProcessFolder(rootFolder, *limit*files.MEGABYTE) //commands的processor.go中
+	err = commands.ProcessFolder(rootFolder, *limit*files.MEGABYTE) //commands的processor.go中。找出比limit大的文件并排序
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
