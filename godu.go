@@ -41,7 +41,8 @@ func main() {
 	}
 	progress := make(chan int)  //创建int 通道
 	go reportProgress(progress)  //显示目录数
-	rootFolder := files.WalkFolder(rootFolderName, ioutil.ReadDir, ignoreBasedOnIgnoreFile(readIgnoreFile()), progress)
+	rootFolder := files.WalkFolder(rootFolderName, ioutil.ReadDir, ignoreBasedOnIgnoreFile(readIgnoreFile()), progress) //ignoreBasedOnIgnoreFile定义在ignore.go
+	                                                                                                                    //readIgnoreFile()也在ignore.go
 	rootFolder.Name = rootFolderName
 	err = commands.ProcessFolder(rootFolder, *limit*files.MEGABYTE)
 	if err != nil {
