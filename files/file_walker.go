@@ -28,13 +28,13 @@ func (f *File) Path() string {
 
 // UpdateSize goes through subfiles and subfolders and accumulates their size
 func (f *File) UpdateSize() {
-	if !f.IsDir {
+	if !f.IsDir {    //是文件直接返回到调用的地方
 		return
 	}
 	var size int64
-	for _, child := range f.Files {
+	for _, child := range f.Files {   
 		child.UpdateSize()
-		size += child.Size
+		size += child.Size //累加文件的大小
 	}
 	f.Size = size
 }
