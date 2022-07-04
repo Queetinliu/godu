@@ -26,6 +26,6 @@ func PruneSmallFiles(folder *File, limit int64) {
 			prunedFiles = append(prunedFiles, file)
 		}
 	}
-	folder.Files = prunedFiles
+	folder.Files = prunedFiles  //返回大于limit的文件列表
 
 }
