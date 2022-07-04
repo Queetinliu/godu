@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"sync"
+	"fmt"
 )
 
 // File structure representing files and folders with their accumulated sizes
@@ -63,7 +64,7 @@ func WalkFolder(
 ) *File {
 	var wg sync.WaitGroup
 	c := make(chan bool, 2*runtime.NumCPU())  //runtime.NumCPU()返回可用cpu数，创建带缓冲通道
-	root := walkSubFolderConcurrently(path, nil, ignoringReadDir(ignoreFunction, readDir), c, &wg, progress)
+	root := walkSubFolderConcurrently(path, nil, ignoringReadDir(ignoreFunction, readDir), c, &wg, progress) //一开始默认的父目录为空
 	wg.Wait()
 	close(progress)
 	root.UpdateSize()
@@ -85,7 +86,8 @@ func walkSubFolderConcurrently(
 		return result
 	}
 	dirName, name := filepath.Split(path)  
-	result.Files = make([]*File, 0, len(entries))
+	result.Files = make([]*File, 0, len(entries)) //这个为什么这么做呢？
+	fmt.Printf("reslult is %v",result)
 	numSubFolders := 0
 	defer updateProgress(progress, &numSubFolders)
 	var mutex sync.Mutex
@@ -96,7 +98,7 @@ func walkSubFolderConcurrently(
 			wg.Add(1)
 			go func() {
 				c <- true
-				subFolder := walkSubFolderConcurrently(subFolderPath, result, readDir, c, wg, progress)
+				subFolder := walkSubFolderConcurrently(subFolderPath, result, readDir, c, wg, progress) //递归处理
 				mutex.Lock()
 				result.Files = append(result.Files, subFolder)
 				mutex.Unlock()
