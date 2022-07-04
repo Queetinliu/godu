@@ -10,7 +10,7 @@ import (
 	"github.com/viktomas/godu/files"
 )
 
-func readIgnoreFile() []string {
+func readIgnoreFile() []string {    //读取当前用户家目录下的.goduignore
 	usr, err := user.Current()
 	if err != nil {
 		log.Println("Wasn't able to retrieve current user at runtime")
@@ -31,7 +31,7 @@ func readIgnoreFile() []string {
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
-	return lines
+	return lines  
 }
 
 func ignoreBasedOnIgnoreFile(ignoreFile []string) files.ShouldIgnoreFolder {
@@ -42,6 +42,6 @@ func ignoreBasedOnIgnoreFile(ignoreFile []string) files.ShouldIgnoreFolder {
 	return func(absolutePath string) bool {
 		_, name := filepath.Split(absolutePath)
 		_, ignored := ignoredFolders[name]
-		return ignored
+		return ignored    //根据是否存在来判断
 	}
 }
